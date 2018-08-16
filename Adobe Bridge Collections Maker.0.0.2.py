@@ -1,31 +1,43 @@
 # -*- coding: utf-8 -*-
 """
 Spyder Editor
-Author: Wolfgang Haak
+Author: Whiskey Hotel
 Pyhton 3.6.x
 """
-
 import os
 import re
 import sys
 
-def main():
-    print("Program End, Probably Successful, check %appdata")
-
+# =============================================================================
+# Adobe boilerplate definitions
+# =============================================================================
+    
 header1 ="<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>\n" 
 header2 ="<arbitrary_collection version='1'>\n"
 prefix = "\t<file uri='bridge:fs:file:///" #\t add tab \n adds carraige return
 appendix = "'>\n"
 footer ="</arbitrary_collection>"    
 
+# =============================================================================
+# Check Number of Inputs Correct
+# =============================================================================
 if len(sys.argv) != 3:
         print("Probably not the right number of arguments, try \"InputPath\" \"OutputName\"")
         sys.exit(1)
 
+def RegConstr(imageCodes):
+    print(imageCodes)
+    imageType = sys.argv[3]
+    imageRev = sys.argv[4]
+    
+    #\d{4}[_]\d{3}[_][7\d]{2}[_]\d{2}\.(tif)
+#RegConstr(sys.argv[3])
+
+# =============================================================================
+# RegEx Matching Stuff
+# =============================================================================
 matches = []
-#\d{4}[_]\d{3}[_][W\d]{2}[_]\d{2}.tif
-# img_re = re.compile(r'.+\.(psd)$', re.IGNORECASE)
-img_re = re.compile(r'\d{4}[_]\d{3}[_][7\d]{2}[_]\d{2}\.(tif)$', re.IGNORECASE) #dddd_ddd_7d_dd.tif
+img_re = re.compile(r'\d{4}[_]\d{3}[_][7\d]{2}[_]\d{2}\.(tif)$', re.IGNORECASE)
 
 try:
     for root, dirnames, filenames in os.walk(sys.argv[1]):
@@ -56,6 +68,8 @@ except:
     print("Something Wrong with writing to file")
     sys.exit(1)    
 
+def main():
+    print("Program End, Probably Successful, check %appdata")
 
 if __name__ == '__main__':
     main()
