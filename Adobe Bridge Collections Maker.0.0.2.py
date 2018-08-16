@@ -7,6 +7,17 @@ Pyhton 3.6.x
 import os
 import re
 import sys
+import argparse
+
+parser = argparse.ArgumentParser(description='Adobe Bridge Collections Generator')
+
+parser.add_argument('-p', action="store", type=str, dest="p", required=True)  #path
+parser.add_argument('-n', action="store", type=str, dest="n", default="Auto_Unknown") #collection name
+parser.add_argument('-t', action="store", type=int, dest="t", default=7) #image type
+parser.add_argument('-r', action="store", type=int, dest="r", default=0) #image revision
+parser.add_argument('-f', action="store", type=str, dest="f", default="tif") #filetype tif, jpg, etc.
+
+args = parser.parse_args()
 
 # =============================================================================
 # Adobe boilerplate definitions
@@ -19,28 +30,26 @@ appendix = "'>\n"
 footer ="</arbitrary_collection>"    
 
 # =============================================================================
-# Check Number of Inputs Correct
+# Contruct RegEx for File Search
 # =============================================================================
-if len(sys.argv) != 3:
-        print("Probably not the right number of arguments, try \"InputPath\" \"OutputName\"")
-        sys.exit(1)
-
-def RegConstr(imageCodes):
-    print(imageCodes)
-    imageType = sys.argv[3]
-    imageRev = sys.argv[4]
-    
+def RegConstr():
+    imageType = str(args.t)
+    imageRev = str(args.r)
+    imageFile = args.f
+    RegStr = "\d{4}[_]\d{3}[_][" + imageType + imageRev + "]{2}[_]\d{2}\." + imageFile
+    print (RegStr)
     #\d{4}[_]\d{3}[_][7\d]{2}[_]\d{2}\.(tif)
-#RegConstr(sys.argv[3])
+    
+insert = RegConstr()
 
 # =============================================================================
 # RegEx Matching Stuff
 # =============================================================================
 matches = []
-img_re = re.compile(r'\d{4}[_]\d{3}[_][7\d]{2}[_]\d{2}\.(tif)$', re.IGNORECASE)
+img_re = re.compile(r'insert$', re.IGNORECASE)
 
 try:
-    for root, dirnames, filenames in os.walk(sys.argv[1]):
+    for root, dirnames, filenames in os.walk(args.p):
         matches.extend(os.path.join(root, name) for name in filenames if img_re.match(name))
 except:
     print >> sys.stderr, "Path Error, directory not found"
@@ -52,7 +61,7 @@ def outputf(filelst):
     return bridgelst
 
 try:
-    outputfile = "C:/Users/rockhunter/AppData/Roaming/Adobe/Bridge CC 2018/Collections/Auto_" + sys.argv[2] + ".filelist"
+    outputfile = "C:/Users/rockhunter/AppData/Roaming/Adobe/Bridge CC 2018/Collections/Auto_" + args.n + ".filelist"
 except:
     print("Something Wrong with output path")
     sys.exit(1)
