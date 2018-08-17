@@ -36,8 +36,9 @@ def RegConstr():
     imageType = str(args.t)
     imageRev = str(args.r)
     imageFile = args.f
-    RegStr = "\d{4}[_]\d{3}[_][" + imageType + imageRev + "]{2}[_]\d{2}\." + imageFile
+    RegStr = "\d{4}[_]\d{3}[_][" + imageType +"][" + imageRev + "][_]\d{2}\." + imageFile
     print (RegStr)
+    return RegStr
     #\d{4}[_]\d{3}[_][7\d]{2}[_]\d{2}\.(tif)
     
 insert = RegConstr()
@@ -46,7 +47,7 @@ insert = RegConstr()
 # RegEx Matching Stuff
 # =============================================================================
 matches = []
-img_re = re.compile(r'insert$', re.IGNORECASE)
+img_re = re.compile(insert, re.IGNORECASE)
 
 try:
     for root, dirnames, filenames in os.walk(args.p):
